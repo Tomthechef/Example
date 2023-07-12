@@ -1,0 +1,83 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.7.6'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id 'com.github.jk1.dependency-license-report' version '2.0'
+}
+
+group = 'com.kkday.svc'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    maven {
+        url "http://nexus.sit.kkday.com/nexus/content/groups/public/"
+        allowInsecureProtocol = true
+    }
+    maven {
+        url "http://nexus.sit.kkday.com/nexus/content/repositories/releases"
+        allowInsecureProtocol = true
+    }
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+    implementation "io.springfox:springfox-boot-starter:3.0.0"
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    implementation group:'com.kkday',name:'sdk', version: '0.0.7', changing: true
+    implementation group: 'org.redisson', name: 'redisson', version: '3.19.0'
+
+    runtimeOnly 'org.postgresql:postgresql'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+}
+
+configurations.all {
+  resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+licenseReport {
+    outputDir = "${buildDir}/reports/licenses"
+    allowedLicensesFile = new File("$projectDir/licenses/allowed-licenses.json")
+}
+
+task printNotAllowedLicense {
+    doLast {
+        println()
+        file("${buildDir}/reports/licenses/dependencies-without-allowed-license.json").readLines().forEach {
+            println( it )
+        }
+    }
+}
+checkLicense.finalizedBy printNotAllowedLicense
+compileJava.dependsOn checkLicense
+
+bootRun {
+    jvmArgs=["-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=9996"]
+    args = ["--spring.profiles.active=local"]
+}
+
+test {
+    systemProperty 'spring.profiles.active', 'test'
+}

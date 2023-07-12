@@ -1,0 +1,104 @@
+<configuration>
+    <appender name="STDOUT"
+        class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date %level [%thread] [%X{request-uuid}] %logger{10} [%file:%line] %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+          <level>ERROR</level>
+        </filter>
+    </appender>
+
+    <appender name="apiLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${user.home}/logs/kkday-api/java_example.log</file>
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="com.kkday.sdk.impl.log.DebugJsonLayout" />
+        </encoder>
+        <rollingPolicy
+            class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${user.home}/logs/kkday-api/java_example.log.%d{yyyy-MM-dd}
+            </fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="apiCallLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${user.home}/logs/kkday-api/java_example_call.log</file>
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+        <rollingPolicy
+            class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${user.home}/logs/kkday-api/java_example_call.log.%d{yyyy-MM-dd}
+            </fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="apiCallLog.req" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${user.home}/logs/kkday-api/java_example_call_req.log</file>
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+        <rollingPolicy
+            class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${user.home}/logs/kkday-api/java_example_call_req.log.%d{yyyy-MM-dd}
+            </fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="apiCallLog.resp" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${user.home}/logs/kkday-api/java_example_call_resp.log</file>
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+        <rollingPolicy
+            class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${user.home}/logs/kkday-api/java_example_call_resp.log.%d{yyyy-MM-dd}
+            </fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="apiOutboundCallLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${user.home}/logs/kkday-api/java_example_outbound_call.log</file>
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+        <rollingPolicy
+            class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${user.home}/logs/kkday-api/java_example_outbound_call.log.%d{yyyy-MM-dd}
+            </fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <logger name="com.kkday" level="debug">
+    </logger>
+
+    <logger name="apiCall" level="info" additivity="false">
+        <appender-ref ref="apiCallLog" />
+    </logger>
+
+    <logger name="apiCall.req" level="info" additivity="false">
+        <appender-ref ref="apiCallLog.req" />
+    </logger>
+
+    <logger name="apiCall.resp" level="info" additivity="false">
+        <appender-ref ref="apiCallLog.resp" />
+    </logger>
+
+    <logger name="apiOutboundCallLog" level="info" additivity="false">
+        <appender-ref ref="apiOutboundCallLog" />
+    </logger>
+
+    <root level="info">
+        <appender-ref ref="apiLog" />
+    </root>
+</configuration>

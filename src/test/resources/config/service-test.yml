@@ -1,0 +1,17 @@
+spring.datasource:
+  url: jdbc:postgresql://{{ DB_HOST }}:5432/ {{ DB_NAME }}
+  username: {{ DB_USER }}
+  password: {{ DB_PASSWORD }}
+com.kkday.sdk:
+  jpa:
+    enable: true
+  redis:
+    enable: true
+    ip: redis.sit.kkday.com
+    port: 50000
+  mq:
+    enable: true
+  audit:
+    slack:
+      channel : null
+      srvUrl : null

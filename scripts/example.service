@@ -1,0 +1,20 @@
+[Unit]
+Description=KKDAY example
+After=syslog.target network.target
+
+[Service]
+WorkingDirectory=/data/web-project/application
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=example
+Type=forking
+PIDFile=/tmp/example.pid
+User=www-data
+Group=www-data
+Restart=always
+RestartSec=5
+ExecStart=/data/web-project/application/startup.sh
+KillSignal=SIGTERM
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,46 @@
+spring:
+  config.import: service.yml
+  jpa.open-in-view: false 
+  data.redis.repositories.enabled: false
+server:
+  port: 8080
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      exposure:
+        include:
+        - health
+        - prometheus
+  endpoint:
+    prometheus:
+      enabled: true
+    health:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  server:
+    port: 8090
+com.kkday.sdk:
+  devMode: false
+  serverEnv: dev
+  kibanaUrl: https://kibana.sit.kkday.com
+  trace:
+    url: http://127.0.0.1:16686/trace/
+    host: 127.0.0.1
+    port: 6831
+  mq:
+    enable: true
+    url:
+      producer: amqp://guest:guest@localhost:5672/%2f
+      consumer: amqp://guest:guest@localhost:5672/%2f
+    prefix:
+      exchange: ex-
+    queue:
+      consumer: q-example
+  jpa:
+    enable: true ## 開關 JPA 支援.
+  redis:
+    enable: true ## 開關 REDIS 支援.
