@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @EnableKKdaySdk
 public class Application {
 
-    public static void abc(String[] args) {
+    public static void XYZ(String[] args) {
         SpringApplication.run(Application.class, args);
     }
 
